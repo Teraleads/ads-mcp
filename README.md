@@ -105,7 +105,7 @@ server {
     server_name your-domain.com;
 
     location /mcp {
-        proxy_pass http://localhost:3000/mcp;
+        proxy_pass http://localhost:3003/mcp;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -116,7 +116,7 @@ server {
     }
 
     location /health {
-        proxy_pass http://localhost:3000/health;
+        proxy_pass http://localhost:3003/health;
     }
 }
 ```
@@ -143,6 +143,23 @@ In Claude Desktop or claude.ai settings:
   }
 }
 ```
+
+---
+
+## Deploy with Coolify
+
+If deployment fails during **“Preparing container”** with:
+
+`fatal: could not read Username for 'https://github.com': No such device or address`
+
+Coolify is running `git ls-remote` over **HTTPS** without credentials. That happens when the GitHub repo is **private** but the resource was set up like a **public** repo (or GitHub App / deploy key was never completed).
+
+**Fix (pick one, in the Coolify UI):**
+
+1. **GitHub App (recommended)** — When creating the application, choose the private-repo flow and complete [GitHub App integration](https://coolify.io/docs/applications/ci-cd/github/integration#with-github-app-recommended).
+2. **Deploy key** — Use [Deploy keys](https://coolify.io/docs/applications/ci-cd/github/integration#with-deploy-keys): add the public key Coolify shows to the repo’s **Settings → Deploy keys**, then use the matching private-repo setup in Coolify.
+
+After auth is wired, redeploy. See also [Dockerfile build pack](https://coolify.io/docs/applications/build-packs/dockerfile) for build settings (branch, base directory, port).
 
 ---
 

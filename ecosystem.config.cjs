@@ -12,7 +12,7 @@ module.exports = {
       env: {
         NODE_ENV: "production",
         TRANSPORT: "http",
-        PORT: "3000",
+        PORT: "3003",
       },
       env_file: "/root/unified-ads-mcp/.env",
       error_file: "/root/logs/ads-mcp-error.log",

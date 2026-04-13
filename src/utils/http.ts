@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosError } from "axios";
 
 export function createHttpClient(baseURL: string, headers: Record<string, string> = {}): AxiosInstance {
-  const client = axios.create({ baseURL, headers, timeout: 30000 });
+  const client = axios.create({ baseURL, headers, timeout: 30030 });
 
   client.interceptors.response.use(
     (res) => res,

@@ -23,4 +23,4 @@ ssh "$REMOTE" "cd /root/unified-ads-mcp && npm install --omit=dev && pm2 restart
 
 echo "Done! Checking health..."
 sleep 2
-ssh "$REMOTE" "curl -s http://localhost:3000/health | node -e \"const d=require('fs').readFileSync('/dev/stdin','utf8'); const j=JSON.parse(d); console.log('Status:', j.status, '| Tools:', j.tools);\""
+ssh "$REMOTE" "curl -s http://localhost:3003/health | node -e \"const d=require('fs').readFileSync('/dev/stdin','utf8'); const j=JSON.parse(d); console.log('Status:', j.status, '| Tools:', j.tools);\""

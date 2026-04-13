@@ -21,14 +21,14 @@ RUN npm ci --omit=dev && npm cache clean --force
 COPY --from=builder /app/dist ./dist
 
 # Coolify reads this to know which port to expose
-EXPOSE 3000
+EXPOSE 3003
 
 # Health check endpoint — Coolify polls this
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD wget -qO- http://localhost:3000/health || exit 1
+  CMD wget -qO- http://localhost:3003/health || exit 1
 
 ENV NODE_ENV=production
 ENV TRANSPORT=http
-ENV PORT=3000
+ENV PORT=3003
 
 CMD ["node", "dist/index.js"]

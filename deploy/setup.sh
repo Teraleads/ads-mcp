@@ -42,19 +42,19 @@ echo "  UFW status: $(ufw status | head -1)"
 
 # ─── App directory + logs ─────────────────────────────────────────────────────
 echo "[4/7] Creating directories..."
-mkdir -p /root/unified-ads-mcp /root/logs
-if [[ ! -f /root/unified-ads-mcp/package.json ]]; then
-  echo "  NOTE: Upload your code to /root/unified-ads-mcp/ and re-run step 5+"
+mkdir -p /root/ads-mcp /root/logs
+if [[ ! -f /root/ads-mcp/package.json ]]; then
+  echo "  NOTE: Upload your code to /root/ads-mcp/ and re-run step 5+"
 fi
 
 # ─── nginx ────────────────────────────────────────────────────────────────────
 echo "[5/7] Configuring nginx..."
-NGINX_CONF="/etc/nginx/sites-available/unified-ads-mcp"
-sed "s/YOUR_DOMAIN/$DOMAIN/g" /root/unified-ads-mcp/deploy/nginx.conf > "$NGINX_CONF" || \
+NGINX_CONF="/etc/nginx/sites-available/ads-mcp"
+sed "s/YOUR_DOMAIN/$DOMAIN/g" /root/ads-mcp/deploy/nginx.conf > "$NGINX_CONF" || \
   echo "  WARNING: deploy/nginx.conf not found — copy it manually to $NGINX_CONF"
 
 if [[ -f "$NGINX_CONF" ]]; then
-  ln -sf "$NGINX_CONF" /etc/nginx/sites-enabled/unified-ads-mcp
+  ln -sf "$NGINX_CONF" /etc/nginx/sites-enabled/ads-mcp
   rm -f /etc/nginx/sites-enabled/default
   nginx -t && systemctl reload nginx
   echo "  nginx configured for $DOMAIN"
@@ -75,10 +75,10 @@ echo "=================================================="
 echo " Setup complete!"
 echo ""
 echo " Next steps:"
-echo "  1. Upload code:   scp -r unified-ads-mcp root@$(curl -s ifconfig.me):/root/"
-echo "  2. Configure:     cp /root/unified-ads-mcp/.env.example /root/unified-ads-mcp/.env"
-echo "                    nano /root/unified-ads-mcp/.env  (fill in API keys)"
-echo "  3. Build + start: cd /root/unified-ads-mcp && npm install && npm run build"
+echo "  1. Upload code:   scp -r ads-mcp root@$(curl -s ifconfig.me):/root/"
+echo "  2. Configure:     cp /root/ads-mcp/.env.example /root/ads-mcp/.env"
+echo "                    nano /root/ads-mcp/.env  (fill in API keys)"
+echo "  3. Build + start: cd /root/ads-mcp && npm install && npm run build"
 echo "                    pm2 start ecosystem.config.cjs"
 echo "                    pm2 save"
 echo "  4. Test:          curl https://$DOMAIN/health"

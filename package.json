@@ -1,5 +1,5 @@
 {
-  "name": "unified-ads-mcp",
+  "name": "ads-mcp",
   "version": "1.0.0",
   "description": "Unified MCP server for Google Ads, Meta, TikTok, and LinkedIn advertising platforms",
   "main": "dist/index.js",

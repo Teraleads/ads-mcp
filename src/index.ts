@@ -4,13 +4,14 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import express, { Request, Response, NextFunction } from "express";
 import { TOOL_DEFINITIONS } from "./tools/definitions.js";
+import { inputSchemaToZodRawShape } from "./tools/input-schema-to-zod.js";
 import { routeTool } from "./tools/router.js";
 
 // ─── Build MCP Server ─────────────────────────────────────────────────────────
 
 function createServer(): McpServer {
   const server = new McpServer({
-    name: "unified-ads-mcp",
+    name: "ads-mcp",
     version: "1.0.0",
   });
 
@@ -19,7 +20,7 @@ function createServer(): McpServer {
     server.tool(
       tool.name,
       tool.description,
-      tool.inputSchema.properties as Record<string, unknown>,
+      inputSchemaToZodRawShape(tool.inputSchema),
       async (args: Record<string, unknown>) => {
         try {
           const result = await routeTool(tool.name, args);
@@ -51,7 +52,7 @@ async function startStdio() {
   const server = createServer();
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("[unified-ads-mcp] Running on stdio transport");
+  console.error("[ads-mcp] Running on stdio transport");
 }
 
 async function startHttp() {
@@ -61,8 +62,11 @@ async function startHttp() {
   const app = express();
   app.use(express.json());
 
-  // Bearer token auth middleware (required in HTTP mode)
+  // Bearer token auth for /mcp only — /health stays unauthenticated for load balancers and local checks
   app.use((req: Request, res: Response, next: NextFunction) => {
+    if (req.path === "/health") {
+      return next();
+    }
     if (!SECRET) {
       console.error("[WARN] API_SECRET not set — server is unauthenticated!");
       return next();
@@ -79,7 +83,7 @@ async function startHttp() {
   app.get("/health", (_req, res) => {
     res.json({
       status: "ok",
-      server: "unified-ads-mcp",
+      server: "ads-mcp",
       version: "1.0.0",
       tools: TOOL_DEFINITIONS.length,
       platforms: ["google_ads", "meta", "tiktok", "linkedin"],
@@ -98,9 +102,9 @@ async function startHttp() {
   });
 
   app.listen(PORT, () => {
-    console.log(`[unified-ads-mcp] HTTP server running on http://localhost:${PORT}/mcp`);
-    console.log(`[unified-ads-mcp] Health check: http://localhost:${PORT}/health`);
-    console.log(`[unified-ads-mcp] Tools registered: ${TOOL_DEFINITIONS.length}`);
+    console.log(`[ads-mcp] HTTP server running on http://localhost:${PORT}/mcp`);
+    console.log(`[ads-mcp] Health check: http://localhost:${PORT}/health`);
+    console.log(`[ads-mcp] Tools registered: ${TOOL_DEFINITIONS.length}`);
   });
 }
 

@@ -38,7 +38,7 @@ Add to `claude_desktop_config.json` (`~/Library/Application Support/Claude/` on 
   "mcpServers": {
     "unified-ads": {
       "command": "node",
-      "args": ["/absolute/path/to/unified-ads-mcp/dist/index.js"],
+      "args": ["/absolute/path/to/ads-mcp/dist/index.js"],
       "env": {
         "GOOGLE_ADS_CLIENT_ID": "...",
         "GOOGLE_ADS_CLIENT_SECRET": "...",
@@ -78,10 +78,10 @@ npm install -g pm2
 
 ```bash
 # On your local machine
-scp -r unified-ads-mcp root@your-droplet-ip:/root/
+scp -r ads-mcp root@your-droplet-ip:/root/
 
 # On the Droplet
-cd /root/unified-ads-mcp
+cd /root/ads-mcp
 npm install && npm run build
 cp .env.example .env
 nano .env  # Fill in all credentials + set TRANSPORT=http + set API_SECRET=some-long-random-string
@@ -90,7 +90,7 @@ nano .env  # Fill in all credentials + set TRANSPORT=http + set API_SECRET=some-
 ### 3. Start with PM2
 
 ```bash
-pm2 start dist/index.js --name unified-ads-mcp
+pm2 start dist/index.js --name ads-mcp
 pm2 save
 pm2 startup
 ```

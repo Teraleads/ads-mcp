@@ -1,9 +1,9 @@
 module.exports = {
   apps: [
     {
-      name: "unified-ads-mcp",
+      name: "ads-mcp",
       script: "dist/index.js",
-      cwd: "/root/unified-ads-mcp",
+      cwd: "/root/ads-mcp",
       interpreter: "node",
       instances: 1,
       autorestart: true,
@@ -14,7 +14,7 @@ module.exports = {
         TRANSPORT: "http",
         PORT: "3003",
       },
-      env_file: "/root/unified-ads-mcp/.env",
+      env_file: "/root/ads-mcp/.env",
       error_file: "/root/logs/ads-mcp-error.log",
       out_file: "/root/logs/ads-mcp-out.log",
       log_date_format: "YYYY-MM-DD HH:mm:ss Z",

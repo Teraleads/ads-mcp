@@ -16,10 +16,10 @@ npm run build
 
 echo "Uploading to $REMOTE..."
 rsync -az --exclude='node_modules' --exclude='.env' --exclude='.git' \
-  ./ "$REMOTE:/root/unified-ads-mcp/"
+  ./ "$REMOTE:/root/ads-mcp/"
 
 echo "Installing deps + restarting..."
-ssh "$REMOTE" "cd /root/unified-ads-mcp && npm install --omit=dev && pm2 restart unified-ads-mcp --update-env"
+ssh "$REMOTE" "cd /root/ads-mcp && npm install --omit=dev && pm2 restart ads-mcp --update-env"
 
 echo "Done! Checking health..."
 sleep 2
